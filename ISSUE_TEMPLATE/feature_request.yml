@@ -1,0 +1,72 @@
+name: Feature request
+description: Suggest something new
+title: ""
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Large changes need an [RFC](https://github.com/Qinux-Os/rfcs) before an
+        implementation. Open the issue first to discuss the idea, then write the
+        RFC if it looks promising.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Desktop and KDE
+        - Installer and ISO
+        - Packaging
+        - Hardware support
+        - Visual design
+        - Command line tools
+        - Documentation
+        - Infrastructure
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you unable to do today? Describe the situation, not
+        the solution.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: What would you like to happen instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What have you already tried?
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      description: How much does this change?
+      options:
+        - Self-contained, one repository
+        - Cross-repository
+        - Architectural
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues and RFCs.
+          required: true
+        - label: This is not a bug report.
+          required: true

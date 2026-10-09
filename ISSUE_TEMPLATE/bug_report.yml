@@ -1,0 +1,98 @@
+name: Bug report
+description: Something does not work as documented
+title: ""
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+
+        **Do not use this template for security vulnerabilities.**
+        Report those privately through
+        [GitHub Security Advisories](https://github.com/Qinux-Os/community/security/advisories/new).
+
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      description: Which repository or area is affected?
+      placeholder: installer, kde, initramfs, ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - System does not boot
+        - Major feature unusable
+        - Minor feature broken
+        - Cosmetic
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: What happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Start from a fresh boot if possible.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: system
+    attributes:
+      label: System information
+      description: Paste the output of `inxi -Fzx`.
+      render: shell
+      value: |
+        inxi -Fzx
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Only the lines that matter, not the whole journal.
+      render: shell
+      value: |
+        journalctl -b -p err --no-pager
+
+  - type: textarea
+    id: extras
+    attributes:
+      label: Anything else
+      description: Screenshots, logs, or a bisect result.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues for this.
+          required: true
+        - label: I read the code of conduct.
+          required: true

@@ -1,0 +1,90 @@
+name: Repository checks
+
+# Applied to every repository in the organization. Repository-specific
+# workflows do the real build work; this enforces the basics everywhere.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  markdown:
+    name: Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pymarkdownlnt
+        run: pip install --quiet pymarkdownlnt
+
+      # The config lives in this organization-wide repository, not in the
+      # repository being checked, so it is fetched explicitly. Without it every
+      # repository would need its own copy and they would drift apart.
+      - name: Fetch the organization markdown config
+        run: |
+          mkdir -p .github
+          curl -fsSL -o .github/.markdownlint.yml \
+            https://raw.githubusercontent.com/Qinux-Os/.github/main/.markdownlint.yml
+
+      - name: Lint
+        run: pymarkdownlnt --config .github/.markdownlint.yml scan
+
+  license:
+    name: LICENSE present
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: LICENSE must exist
+        run: |
+          if [ ! -f LICENSE ]; then
+            echo "::error::No LICENSE file found."
+            exit 1
+          fi
+
+      - name: LICENSE must be non-empty
+        run: |
+          if [ ! -s LICENSE ]; then
+            echo "::error::LICENSE is empty."
+            exit 1
+          fi
+
+  editorconfig:
+    name: EditorConfig
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: No CRLF line endings
+        run: |
+          if git ls-files -z | xargs -0 grep -IlP '\r$' 2>/dev/null | grep .; then
+            echo "::error::CRLF line endings found."
+            exit 1
+          fi
+
+      - name: No trailing whitespace
+        run: |
+          if git ls-files -z | xargs -0 grep -IlP '[ \t]+$' 2>/dev/null | grep .; then
+            echo "::error::Trailing whitespace found."
+            exit 1
+          fi
+
+      - name: Every file ends with a newline
+        run: |
+          missing=$(git ls-files -z | while IFS= read -r -d '' f; do
+            [ -s "$f" ] && [ -n "$(tail -c1 "$f")" ] && echo "$f"
+          done)
+          if [ -n "$missing" ]; then
+            echo "::error::Files missing trailing newline:"
+            echo "$missing"
+            exit 1
+          fi

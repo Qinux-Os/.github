@@ -1,0 +1,32 @@
+name: Question
+description: Ask how to do something
+title: ""
+labels: ["question"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What have you already read or tried?
+
+  - type: input
+    id: version
+    attributes:
+      label: Qinux version
+      placeholder: "2026.1"
+
+  - type: checkboxes
+    attributes:
+      label: Before asking
+      options:
+        - label: I searched the documentation.
+          required: true
+        - label: I searched existing issues.
+          required: true

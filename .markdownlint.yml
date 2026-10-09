@@ -1,0 +1,45 @@
+# Markdown rules for the Qinux-Os organization.
+#
+# Consumed by pymarkdownlnt. This file is YAML despite the .yml extension,
+# because pymarkdownlnt expects a YAML document:
+#
+#   pymarkdownlnt --config .github/.markdownlint.yml scan
+#
+# Tables, code blocks and headings are exempt from the line length limit:
+# tables are padded for readability, code must never be reflowed, and badge
+# URLs cannot be shortened.
+#
+# NOTE: keys must stay unique. PyYAML silently keeps the last of two duplicate
+# keys, so a repeated `line_length` would be ignored rather than reported.
+
+config:
+  default: true
+
+  # Wrap prose at 80 columns.
+  MD013:
+    line_length: 80
+    strict: false
+    code_blocks: false
+    tables: false
+    headings: false
+
+  # Duplicate headings are fine in different sections, not under one parent.
+  MD024:
+    siblings_only: true
+
+  # Inline HTML is restricted to these elements.
+  MD033:
+    allowed_elements:
+      - br
+      - details
+      - img
+      - kbd
+      - summary
+
+  # Every file starts with exactly one level-1 heading.
+  MD041:
+    level: 1
+
+  # Fenced code blocks only, never indented.
+  MD046:
+    style: fenced
